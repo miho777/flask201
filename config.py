@@ -11,7 +11,7 @@ ecs_test_drive = {
     'ecs_bucket_name' : 'photo-album'
 }
 piper_mongodb = {
-    'mongodb_name' : 'XXP2023_NMiho',
+    'mongodb_name' : 'wave8_Miho',
     'mongodb_user' : 'piperdb1',
     'mongodb_password' : 'XVtV54NdmaXXXXXXX',
 }
