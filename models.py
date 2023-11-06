@@ -34,12 +34,15 @@ def get_photos():
 
 # Insert form fields into database
 def insert_photo(request):
+    ecs_access_key_id = os.getenv('ECS_ID','Need2SetECS_ID') 
     title = request.form['title']
     comments = request.form['comments']
     filename = secure_filename(request.files['photo'].filename)
     thumbfile = filename.rsplit(".",1)[0] + "-thumb.jpg"
-    photo_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + filename
-    thumbnail_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + thumbfile
+    photo_url = "http://" + ecs_access_key_id.split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + filename
+    thumbnail_url = "http://" + ecs_access_key_id.split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + thumbfile
+    #photo_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + filename
+    #thumbnail_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + thumbfile
 
     db.photos.insert_one({'title':title, 'comments':comments, 'photo':photo_url, 'thumb':thumbnail_url})
 
