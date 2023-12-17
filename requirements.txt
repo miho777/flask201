@@ -2,4 +2,3 @@ Flask
 boto3
 Pillow
 pymongo
-werkzeug.utils
