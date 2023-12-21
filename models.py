@@ -57,21 +57,39 @@ def upload_photo(file):
     ecs_bucket_name = ecs_test_drive['ecs_bucket_name']
 
     # Open a session with ECS using the S3 API
-    session = boto3.resource(service_name='s3', aws_access_key_id=ecs_access_key_id, aws_secret_access_key=ecs_secret_key, endpoint_url=ecs_endpoint_url)
+    session = boto3.resource(
+        service_name='s3',
+        aws_access_key_id=ecs_access_key_id,
+        aws_secret_access_key=ecs_secret_key,
+        endpoint_url=ecs_endpoint_url
+    )
 
     # Remove unsupported characters from filename
     filename = secure_filename(file.filename)
 
     # First save the file locally
-    file.save(os.path.join("uploads", filename))
+    file_path = os.path.join("uploads/", filename)
+    file.save(file_path)
+
+    # Check file extension
+    file_extension = os.path.splitext(filename)
+    file_extension = file_extension.lower()
 
     # Create a thumbnail
     size = 225, 225
-    with open("uploads/" + filename, 'rb') as f:
+    with open(file_path, 'rb') as f:
         img = Image.open(f)
-        img.thumbnail(size)
-        thumbfile = filename.rsplit(".",1)[0] + "-thumb.jpg"
-        img.save("uploads/" + thumbfile,"JPEG")
+
+        if file_extension in ['.jpg', '.jpeg']:
+            img.thumbnail(size)
+            thumbfile = filename.rsplit(".", 1)[0] + "-thumb.jpg"
+            img.save(os.path.join("uploads/", thumbfile), "JPEG")
+        elif file_extension == '.png':
+            # For PNG files, create a thumbnail directly
+            img.thumbnail(size)
+            thumbfile = filename.rsplit(".", 1)[0] + "-thumb.png"
+            img.save(os.path.join("uploads/", thumbfile), "PNG")
+
         img.close()
 
     # Empty the variables to prevent memory leaks
