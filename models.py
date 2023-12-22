@@ -38,7 +38,17 @@ def insert_photo(request):
     title = request.form['title']
     comments = request.form['comments']
     filename = secure_filename(request.files['photo'].filename)
-    thumbfile = filename.rsplit(".",1)[0] + "-thumb.jpg"
+
+    # Check file extension
+    file_extension = os.path.splitext(filename)
+    file_extension = file_extension.lower()
+
+    if file_extension in ['.jpg', '.jpeg']:
+        thumbfile = filename.rsplit(".", 1)[0] + "-thumb.jpg"
+    elif file_extension == '.png':
+        # For PNG files, create a thumbnail directly
+        thumbfile = filename.rsplit(".", 1)[0] + "-thumb.png"
+
     # ecs_access_key_id = os.getenv('ECS_ID','Need2SetECS_ID') 
     # photo_url = "http://" + ecs_access_key_id.split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + filename
     # thumbnail_url = "http://" + ecs_access_key_id.split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + thumbfile
