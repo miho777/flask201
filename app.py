@@ -21,9 +21,14 @@ def home():
 # This route accepts GET and POST calls
 @app.route('/upload', methods=['POST'])
 def upload():
-	insert_photo(request)							# Call function to process the database transaction in 'models.py'
-	upload_photo(request.files['photo'])			# Call function to upload photo to ECS in 'models.py'
-	return render_template('submit-photo.html')		# Return a page to inform the user of a successful upload
+	### Call function to process the database transaction in 'models.py'
+	ret = insert_photo(request)			
+	if ret == False:		### un-choose photp then return
+		return render_template('photo.html',photo=[])
+	### Call function to upload photo to ECS in 'models.py' 							
+	upload_photo(request.files['photo'])			
+	### Return a page to inform the user of a successful upload
+	return render_template('submit-photo.html')	
 
 @app.route('/photo/<path:photo>')
 def photo(photo):
